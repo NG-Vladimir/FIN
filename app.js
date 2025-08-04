@@ -1,4 +1,3 @@
-// Переключение "Приход"/"Расход", скрытие десятины и смена цвета кнопки
 const incomeBtn = document.getElementById('income-btn');
 const expenseBtn = document.getElementById('expense-btn');
 const mainBtn = document.querySelector('.main-btn');
