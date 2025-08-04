@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iOS Финансы</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="balance-card">
+        <div class="profile-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="4" stroke="#222" stroke-width="1.5"/>
+            <path d="M4 20c0-2.67 3.59-4 8-4s8 1.33 8 4" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="balance-header">
+          <span>Текущий баланс</span>
+        </div>
+        <div class="balance-value">
+          <span>0 <span class="currency">BYN</span></span>
+        </div>
+        <div class="balance-updated">
+          Обновлено: нет данных
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="switcher">
+        <button class="active" id="income-btn">Приход</button>
+        <button id="expense-btn">Расход</button>
+      </div>
+
+      <div class="tithe-row" id="tithe-row">
+        <span>Десятина Господу</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="input-row-category-wrap">
+        <div class="input-row">
+          <input type="number" placeholder="Сумма" class="amount-input" id="amount-input"/>
+          <span class="currency">BYN</span>
+        </div>
+        <div class="category-row">
+          <span>Категория</span>
+          <select>
+            <option>Транспорт</option>
+            <option>Еда</option>
+            <option>Жильё</option>
+            <option>Развлечения</option>
+          </select>
+        </div>
+      </div>
+      <div class="main-btn-wrap">
+        <button class="main-btn">Добавить приход</button>
+      </div>
+    </main>
+
+    <nav>
+      <button class="nav-btn active" aria-label="Баланс">
+        <span class="nav-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M4 11.5L12 5l8 6.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.5 20V14.5h5V20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>Баланс</span>
+      </button>
+      <button class="nav-btn" aria-label="История">
+        <span class="nav-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 7.5v4.7l3.5 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>История</span>
+      </button>
+      <button class="nav-btn" aria-label="Цели">
+        <span class="nav-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+        </span>
+        <span>Цели</span>
+      </button>
+      <button class="nav-btn" aria-label="Настройки">
+        <span class="nav-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M19.05 15a2.2 2.2 0 0 0 .4 2.4l.02.02a1.7 1.7 0 1 1-2.4 2.4l-.02-.02a2.2 2.2 0 0 0-2.4-.4A2.2 2.2 0 0 0 14 21.7V22a1.7 1.7 0 1 1-3.4 0v-.3a2.2 2.2 0 0 0-1.6-2.12 2.2 2.2 0 0 0-2.4.4l-.02.02a1.7 1.7 0 1 1-2.4-2.4l.02-.02a2.2 2.2 0 0 0 .4-2.4A2.2 2.2 0 0 0 2.3 14H2a1.7 1.7 0 1 1 0-3.4h.3a2.2 2.2 0 0 0 1.62-1.6 2.2 2.2 0 0 0-.4-2.4l-.02-.02A1.7 1.7 0 1 1 5.7 4.5l.02.02a2.2 2.2 0 0 0 2.4.4A2.2 2.2 0 0 0 10 2.3V2a1.7 1.7 0 1 1 3.4 0v.3a2.2 2.2 0 0 0 1.6 2.12 2.2 2.2 0 0 0 2.4-.4l.02-.02a1.7 1.7 0 1 1 2.4 2.4l-.02.02a2.2 2.2 0 0 0-.4 2.4A2.2 2.2 0 0 0 21.7 10h.3a1.7 1.7 0 1 1 0 3.4h-.3a2.2 2.2 0 0 0-1.62 1.6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Настройки</span>
+      </button>
+    </nav>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

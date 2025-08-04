@@ -1,0 +1,302 @@
+body {
+    background: #f7f7fa;
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color: #1d1d1f;
+  }
+  
+  .app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 34px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1.5px 3px rgba(0,0,0,0.02);
+    overflow: hidden;
+  }
+  
+  header {
+    position: relative;
+    padding: 24px 24px 0 24px;
+  }
+  
+  .balance-card {
+    background: #f9f9fb;
+    border-radius: 22px;
+    padding: 32px 22px 22px 22px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    min-height: 120px;
+  }
+  
+  .balance-header {
+    color: #232323;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: -0.01em;
+  }
+  
+  .balance-value {
+    font-size: 38px;
+    font-weight: 700;
+    margin: 10px 0 6px 0;
+    color: #1d1d1f;
+  }
+  
+  .currency {
+    font-size: 18px;
+    font-weight: 500;
+    color: #b0b0be;
+  }
+  
+  .balance-updated {
+    color: #8c8c98;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  
+  .profile-icon {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.32;
+    transition: box-shadow .2s;
+  }
+  
+  .profile-icon svg {
+    display: block;
+  }
+  
+  main {
+    flex: 1;
+    padding: 32px 20px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .switcher {
+    display: flex;
+    background: #f2f4f7;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+  
+  .switcher button {
+    flex: 1;
+    padding: 13px 0;
+    border: none;
+    background: none;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    border-radius: 0;
+    outline: none;
+    color: #8c8c98;
+  }
+  .switcher button.active#income-btn {
+    background: #34c759;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(52,199,89,0.10);
+  }
+  .switcher button.active#expense-btn {
+    background: #ff453a;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255,69,58,0.10);
+  }
+  .switcher button:not(.active):hover {
+    background: #e6f0ff;
+  }
+  
+  .tithe-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #8c8c98;
+    font-size: 16px;
+    transition: all 0.2s;
+    margin-bottom: 0;
+  }
+  
+  .tithe-row.hidden {
+    display: none;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d1d1d6;
+    transition: .4s;
+    border-radius: 26px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px; width: 22px;
+    left: 2px; bottom: 2px;
+    background-color: #fff;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+  }
+  
+  .switch input:checked + .slider {
+    background-color: #34c759;
+  }
+  
+  .switch input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+  
+  .input-row-category-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f2f4f7;
+    border-radius: 13px;
+    padding: 12px 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+  
+  .amount-input {
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 22px;
+    flex: 1;
+    color: #222;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  
+  .category-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    color: #8c8c98;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+  }
+  
+  .category-row select {
+    padding: 7px 18px;
+    border-radius: 13px;
+    border: none;
+    background: #e6eaf2;
+    font-size: 17px;
+    color: #253858;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    outline: none;
+    min-width: 120px;
+  }
+  
+  .main-btn-wrap {
+    margin-top: 100px; /* опустить кнопку ниже */
+    width: 100%;
+  }
+  
+  .main-btn {
+    width: 100%;
+    background: #34c759;
+    color: #fff;
+    border: none;
+    padding: 17px 0;
+    font-size: 20px;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(52,199,89,0.10);
+    transition: background 0.2s;
+  }
+  
+  .main-btn.expense {
+    background: #ff453a;
+    box-shadow: 0 4px 16px rgba(255,69,58,0.10);
+  }
+  
+  .main-btn:hover {
+    filter: brightness(0.98);
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-around;
+    background: #f9f9fb;
+    border-top: 1px solid #ececf1;
+    padding: 6px 0 7px 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.02);
+  }
+  
+  .nav-btn {
+    flex: 1;
+    color: #b0b0be;
+    background: none;
+    border: none;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: color 0.2s;
+    position: relative;
+    padding: 7px 0 0 0;
+    font-weight: 600;
+    outline: none;
+  }
+  
+  .nav-btn .nav-icon svg {
+    stroke: currentColor;
+    color: inherit;
+    transition: color 0.2s, stroke 0.2s;
+  }
+  
+  .nav-btn.active {
+    color: #007aff;
+  }
+  
+  .nav-btn.active .nav-icon svg {
+    stroke: #007aff;
+    color: #007aff;
+  }
