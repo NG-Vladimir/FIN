@@ -160,13 +160,13 @@ body {
   padding-right: 2px;
 }
 
-/* Цели и Настройки — скролл только внутри экрана, отступ от меню */
+/* Цели и Настройки — скролл только внутри экрана, отступ от меню и от шапки */
 .view-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0 2px 28px 0;
+  padding: 24px 2px 28px 0;
 }
 
 @keyframes fadeIn {
@@ -366,18 +366,18 @@ body {
 .summary-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .summary-block {
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: var(--radius-sm);
   background: var(--glass);
   border: 1px solid var(--glass-border);
 }
 
 .summary-block h3 {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -389,11 +389,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: 6px 8px;
+  margin: 0 -8px;
   font-size: 13px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: background 0.15s;
+  min-height: 36px;
 }
 
 .summary-cat:hover {
@@ -416,9 +418,10 @@ body {
 }
 
 .section-desc {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   font-size: 14px;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .transaction-list {
@@ -576,19 +579,19 @@ body {
 .card-section {
   border-radius: var(--radius-xl);
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   box-shadow: var(--shadow);
 }
 
 .card-section:last-child {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .pill-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .pill {
@@ -667,7 +670,7 @@ body {
 /* ===== Goals list ===== */
 .goals-list {
   list-style: none;
-  margin: 0 0 16px;
+  margin: 0 0 24px;
   padding: 0;
 }
 
@@ -680,7 +683,11 @@ body {
   background: var(--glass-strong);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.goal-item:last-child {
+  margin-bottom: 0;
 }
 
 .goal-item .goal-info {
@@ -732,6 +739,7 @@ body {
 
 .btn-add-goal {
   width: 100%;
+  margin-top: 8px;
   background: var(--gradient-accent) !important;
   color: #fff !important;
   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
