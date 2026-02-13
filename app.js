@@ -31,9 +31,10 @@
   var $note = document.getElementById('note');
   var $modalTitle = document.getElementById('modal-title');
   var $fieldTithe = document.getElementById('field-tithe');
-  var $titheSlider = document.getElementById('tithe-slider');
-  var $titheValue = document.getElementById('tithe-value');
+  var $titheSwitch = document.getElementById('tithe-switch');
   var $monthLabel = document.getElementById('month-label');
+  var $filterCategory = document.getElementById('filter-category');
+  var $categorySummary = document.getElementById('category-summary');
   var $monthPrev = document.getElementById('month-prev');
   var $monthNext = document.getElementById('month-next');
 
@@ -67,6 +68,7 @@
 
   var selectedMonth = new Date().getMonth();
   var selectedYear = new Date().getFullYear();
+  var selectedCategoryFilter = '';
   var currentCatType = 'income';
 
   function loadFromStorage() {
@@ -128,6 +130,14 @@
     });
   }
 
+  function getFilteredTransactionsForList() {
+    var list = getFilteredTransactions();
+    if (selectedCategoryFilter) {
+      list = list.filter(function (t) { return t.category === selectedCategoryFilter; });
+    }
+    return list;
+  }
+
   function escapeHtml(s) {
     var div = document.createElement('div');
     div.textContent = s;
@@ -139,8 +149,7 @@
     $modalTitle.textContent = type === 'income' ? 'Добавить доход' : 'Добавить расход';
 
     $fieldTithe.style.display = type === 'income' ? 'block' : 'none';
-    $titheSlider.value = '10';
-    $titheValue.textContent = '10%';
+    if ($titheSwitch) $titheSwitch.checked = true;
 
     var cats = getCategories();
     var list = type === 'income' ? cats.income : cats.expense;
@@ -165,10 +174,10 @@
     document.body.style.overflow = '';
   }
 
-  function addTransaction(type, amount, category, note, tithePercent) {
+  function addTransaction(type, amount, category, note, titheOn) {
     var id = Date.now().toString(36) + Math.random().toString(36).slice(2);
     var amountNum = Math.round(Number(amount) * 100) / 100 || 0;
-    var tithePct = type === 'income' && tithePercent != null ? Math.min(20, Math.max(0, Number(tithePercent))) : 0;
+    var tithePct = (type === 'income' && titheOn) ? 20 : 0;
     var titheAmount = Math.round((amountNum * tithePct / 100) * 100) / 100;
     transactions.unshift({
       id: id,
@@ -235,8 +244,74 @@
     $monthNext.disabled = selectedMonth === now.getMonth() && selectedYear === now.getFullYear();
   }
 
-  function renderList() {
+  function getCategoryTotalsForMonth() {
     var list = getFilteredTransactions();
+    var incomeByCat = {};
+    var expenseByCat = {};
+    list.forEach(function (t) {
+      var cat = t.category || (t.type === 'income' ? 'Доход' : 'Расход');
+      if (t.type === 'income') {
+        incomeByCat[cat] = (incomeByCat[cat] || 0) + t.amount;
+      } else {
+        expenseByCat[cat] = (expenseByCat[cat] || 0) + t.amount;
+      }
+    });
+    return { income: incomeByCat, expense: expenseByCat };
+  }
+
+  function renderCategorySummary() {
+    var totals = getCategoryTotalsForMonth();
+    var incomeCats = Object.keys(totals.income).sort();
+    var expenseCats = Object.keys(totals.expense).sort();
+    if (incomeCats.length === 0 && expenseCats.length === 0) {
+      $categorySummary.innerHTML = '';
+      return;
+    }
+    var html = '<div class="summary-grid">';
+    html += '<div class="summary-block"><h3>Доходы</h3>';
+    incomeCats.forEach(function (cat) {
+      html += '<div class="summary-cat income" data-category="' + escapeHtml(cat) + '" role="button" tabindex="0">';
+      html += '<span>' + escapeHtml(cat) + '</span><span>' + formatMoney(totals.income[cat]) + '</span></div>';
+    });
+    html += '</div><div class="summary-block"><h3>Расходы</h3>';
+    expenseCats.forEach(function (cat) {
+      html += '<div class="summary-cat expense" data-category="' + escapeHtml(cat) + '" role="button" tabindex="0">';
+      html += '<span>' + escapeHtml(cat) + '</span><span>' + formatMoney(totals.expense[cat]) + '</span></div>';
+    });
+    html += '</div></div>';
+    $categorySummary.innerHTML = html;
+    $categorySummary.querySelectorAll('.summary-cat').forEach(function (el) {
+      el.addEventListener('click', function () {
+        selectedCategoryFilter = el.dataset.category || '';
+        $filterCategory.value = selectedCategoryFilter;
+        renderList();
+      });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectedCategoryFilter = el.dataset.category || '';
+          $filterCategory.value = selectedCategoryFilter;
+          renderList();
+        }
+      });
+    });
+  }
+
+  function updateFilterSelect() {
+    var totals = getCategoryTotalsForMonth();
+    var allCats = [];
+    Object.keys(totals.income).forEach(function (c) { allCats.push(c); });
+    Object.keys(totals.expense).forEach(function (c) { if (allCats.indexOf(c) === -1) allCats.push(c); });
+    allCats.sort();
+    if (selectedCategoryFilter && allCats.indexOf(selectedCategoryFilter) === -1) selectedCategoryFilter = '';
+    $filterCategory.innerHTML = '<option value="">Все</option>' + allCats.map(function (c) {
+      return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
+    }).join('');
+    $filterCategory.value = selectedCategoryFilter;
+  }
+
+  function renderList() {
+    var list = getFilteredTransactionsForList();
     $transactionList.innerHTML = '';
     list.forEach(function (t) {
       var li = document.createElement('li');
@@ -262,10 +337,15 @@
 
     if (list.length === 0) {
       var isCurrentMonth = selectedMonth === new Date().getMonth() && selectedYear === new Date().getFullYear();
-      $emptyState.textContent = isCurrentMonth
-        ? 'Пока нет операций.\nДобавьте доход или расход.'
-        : 'В этом месяце нет операций.';
+      $emptyState.textContent = selectedCategoryFilter
+        ? 'В этой категории нет операций за период.'
+        : (isCurrentMonth ? 'Пока нет операций.\nДобавьте доход или расход.' : 'В этом месяце нет операций.');
     }
+  }
+
+  function renderSummaryAndFilter() {
+    updateFilterSelect();
+    renderCategorySummary();
   }
 
   function showView(name) {
@@ -425,6 +505,7 @@
   function render() {
     updateMonthLabel();
     renderBalance();
+    renderSummaryAndFilter();
     renderList();
   }
 
@@ -438,9 +519,12 @@
     if (e.key === 'Escape' && $modalOverlay.classList.contains('visible')) closeModal();
   });
 
-  $titheSlider.addEventListener('input', function () {
-    $titheValue.textContent = this.value + '%';
-  });
+  if ($filterCategory) {
+    $filterCategory.addEventListener('change', function () {
+      selectedCategoryFilter = $filterCategory.value || '';
+      renderList();
+    });
+  }
 
   $modalForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -448,9 +532,9 @@
     var amount = $amount.value;
     var category = $category.value;
     var note = $note.value.trim();
-    var tithePercent = type === 'income' ? $titheSlider.value : 0;
+    var titheOn = type === 'income' && $titheSwitch && $titheSwitch.checked;
     if (!amount || Number(amount) <= 0 || !category) return;
-    addTransaction(type, amount, category, note || undefined, tithePercent);
+    addTransaction(type, amount, category, note || undefined, titheOn);
     closeModal();
   });
 

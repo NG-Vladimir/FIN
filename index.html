@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1a1a2e">
+  <meta name="theme-color" content="#f2f2f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Финансы</title>
@@ -59,38 +59,53 @@
         </section>
 
         <section class="history">
-          <h2 class="section-title">История</h2>
-          <ul class="transaction-list" id="transaction-list"></ul>
-          <p class="empty-state" id="empty-state">Пока нет операций. Добавьте доход или расход.</p>
+          <div class="history-head">
+            <h2 class="section-title">История</h2>
+            <div class="filter-wrap">
+              <label for="filter-category" class="filter-label">Категория</label>
+              <select id="filter-category" class="filter-select" aria-label="Фильтр по категории">
+                <option value="">Все</option>
+              </select>
+            </div>
+          </div>
+          <section class="category-summary" id="category-summary"></section>
+          <div class="history-scroll">
+            <ul class="transaction-list" id="transaction-list"></ul>
+            <p class="empty-state" id="empty-state">Пока нет операций. Добавьте доход или расход.</p>
+          </div>
         </section>
       </div>
 
       <!-- View: Goals -->
       <div class="view view-goals" id="view-goals" hidden>
-        <section class="glass card-section">
-          <h2 class="section-title">Цели</h2>
-          <p class="section-desc">Копилки: укажите цель и сумму.</p>
-          <ul class="goals-list" id="goals-list"></ul>
-          <button type="button" class="btn btn-gradient btn-add-goal" id="btn-add-goal">+ Добавить цель</button>
-        </section>
+        <div class="view-scroll">
+          <section class="glass card-section">
+            <h2 class="section-title">Цели</h2>
+            <p class="section-desc">Копилки: укажите цель и сумму.</p>
+            <ul class="goals-list" id="goals-list"></ul>
+            <button type="button" class="btn btn-gradient btn-add-goal" id="btn-add-goal">+ Добавить цель</button>
+          </section>
+        </div>
       </div>
 
       <!-- View: Settings -->
       <div class="view view-settings" id="view-settings" hidden>
-        <section class="glass card-section">
-          <h2 class="section-title">Категории доходов</h2>
-          <div class="pill-list" id="categories-income"></div>
-          <button type="button" class="btn-pill-add" id="btn-add-cat-income">+ Добавить</button>
-        </section>
-        <section class="glass card-section">
-          <h2 class="section-title">Категории расходов</h2>
-          <div class="pill-list" id="categories-expense"></div>
-          <button type="button" class="btn-pill-add" id="btn-add-cat-expense">+ Добавить</button>
-        </section>
-        <section class="glass card-section">
-          <h2 class="section-title">О приложении</h2>
-          <p class="section-desc">Финансы — учёт доходов и расходов. Данные хранятся только на устройстве (localStorage).</p>
-        </section>
+        <div class="view-scroll">
+          <section class="glass card-section">
+            <h2 class="section-title">Категории доходов</h2>
+            <div class="pill-list" id="categories-income"></div>
+            <button type="button" class="btn-pill-add" id="btn-add-cat-income">+ Добавить</button>
+          </section>
+          <section class="glass card-section">
+            <h2 class="section-title">Категории расходов</h2>
+            <div class="pill-list" id="categories-expense"></div>
+            <button type="button" class="btn-pill-add" id="btn-add-cat-expense">+ Добавить</button>
+          </section>
+          <section class="glass card-section">
+            <h2 class="section-title">О приложении</h2>
+            <p class="section-desc">Финансы — учёт доходов и расходов. Данные хранятся только на устройстве (localStorage).</p>
+          </section>
+        </div>
       </div>
     </main>
 
@@ -124,11 +139,13 @@
           <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="0" required>
         </div>
         <div class="field field-tithe" id="field-tithe">
-          <label>
-            <span>Десятина Господу</span>
-            <output id="tithe-value" aria-live="polite">10%</output>
-          </label>
-          <input type="range" id="tithe-slider" name="tithe" min="0" max="20" value="10" step="5" aria-label="Процент десятины">
+          <div class="tithe-row">
+            <span class="tithe-label">Десятина 20% Господу</span>
+            <label class="ios-switch-wrap" aria-label="Включить десятину 20%">
+              <input type="checkbox" id="tithe-switch" name="tithe" checked>
+              <span class="ios-switch"></span>
+            </label>
+          </div>
         </div>
         <div class="field">
           <label for="category">Категория</label>

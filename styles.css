@@ -1,17 +1,17 @@
-/* ===== Variables — glassmorphism & gradients ===== */
+/* ===== Variables — светлая тема, glassmorphism ===== */
 :root {
-  --bg: #1a1a2e;
-  --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  --glass: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-strong: rgba(255, 255, 255, 0.14);
-  --text: #f5f5f7;
-  --text-secondary: #a0a0a8;
+  --bg: #e8e8ed;
+  --bg-gradient: linear-gradient(160deg, #e8e8ed 0%, #d1d1d6 40%, #e5e5ea 100%);
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-strong: rgba(255, 255, 255, 0.85);
+  --text: #1c1c1e;
+  --text-secondary: #6c6c70;
   --accent: #6366f1;
   --income: #34c759;
   --expense: #ff3b30;
-  --tithe: #eab308;
-  --tithe-bg: rgba(234, 179, 8, 0.2);
+  --tithe: #b8860b;
+  --tithe-bg: rgba(184, 134, 11, 0.18);
   --gradient-income: linear-gradient(135deg, #34c759 0%, #30d158 50%, #00c7be 100%);
   --gradient-expense: linear-gradient(135deg, #ff3b30 0%, #ff6b4a 50%, #ff9f43 100%);
   --gradient-accent: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
@@ -20,8 +20,8 @@
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 24px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.3);
+  --shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
   --safe-top: env(safe-area-inset-top, 0);
   --safe-bottom: env(safe-area-inset-bottom, 0);
   --font: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -62,21 +62,22 @@ body {
   color: var(--text);
   background: var(--bg);
   background: var(--bg-gradient);
-  min-height: 100dvh;
-  min-height: 100vh;
+  height: 100dvh;
+  height: 100vh;
   padding-top: var(--safe-top);
   padding-bottom: var(--safe-bottom);
-  overflow-x: hidden;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100dvh;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 /* ===== Header ===== */
@@ -88,32 +89,84 @@ body {
 
 .header-title {
   margin: 0;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .header-subtitle {
-  margin: 4px 0 0;
-  font-size: 15px;
+  margin: 2px 0 0;
+  font-size: 13px;
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 400;
 }
 
-/* ===== Main & Views ===== */
+/* ===== Main & Views — без скролла всей страницы ===== */
 .main {
   flex: 1;
-  padding: 0 20px 24px;
+  min-height: 0;
+  padding: 0 20px 20px;
   padding-bottom: calc(80px + var(--safe-bottom));
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   animation: fadeIn 0.25s ease;
 }
 
 .view[hidden] {
   display: none !important;
+}
+
+/* Только внутренний скролл: история на главной */
+.view-home {
+  padding: 0;
+}
+.view-home .month-bar {
+  flex-shrink: 0;
+  padding: 8px 0 12px;
+}
+.view-home .balance-card {
+  flex-shrink: 0;
+  margin-bottom: 16px;
+}
+.view-home .actions {
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+.view-home .history {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.view-home .history .section-title {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.history-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
+}
+
+/* Цели и Настройки — скролл только внутри экрана, отступ от меню */
+.view-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 2px 28px 0;
 }
 
 @keyframes fadeIn {
@@ -175,10 +228,10 @@ body {
 }
 
 .balance-value {
-  margin: 0 0 20px;
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  margin: 0 0 18px;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
@@ -199,7 +252,7 @@ body {
 .balance-stats-grid .stat-tithe { grid-column: 1 / -1; }
 
 .stat-tithe .stat-value.tithe { color: var(--tithe); }
-.stat-tithe { background: rgba(234, 179, 8, 0.12); border-color: rgba(234, 179, 8, 0.25); }
+.stat-tithe { background: var(--tithe-bg); border-color: rgba(184, 134, 11, 0.3); }
 
 .stat {
   border-radius: var(--radius-sm);
@@ -266,11 +319,100 @@ body {
 }
 
 /* ===== History ===== */
+.history-head {
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+.history-head .section-title {
+  margin: 0 0 10px;
+}
+
+.filter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.filter-select {
+  flex: 1;
+  max-width: 200px;
+  padding: 8px 12px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.category-summary {
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+.category-summary:empty {
+  display: none;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.summary-block {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+}
+
+.summary-block h3 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+}
+
+.summary-cat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.summary-cat:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.summary-cat span:last-child {
+  font-weight: 600;
+}
+
+.summary-cat.income span:last-child { color: var(--income); }
+.summary-cat.expense span:last-child { color: var(--expense); }
+
 .section-title {
   margin: 0 0 12px;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 
 .section-desc {
@@ -292,12 +434,13 @@ body {
   gap: 12px;
   padding: 14px 16px;
   background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   margin-bottom: 8px;
   animation: slideIn 0.25s ease;
+  box-shadow: var(--shadow);
 }
 
 @keyframes slideIn {
@@ -360,7 +503,7 @@ body {
 
 .transaction-delete:hover,
 .transaction-delete:focus {
-  background: rgba(255, 59, 48, 0.2);
+  background: rgba(255, 59, 48, 0.15);
   color: var(--expense);
 }
 
@@ -391,7 +534,8 @@ body {
   padding: 12px 16px;
   padding-bottom: calc(12px + var(--safe-bottom));
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  border-top: 1px solid var(--glass-border);
   z-index: 50;
 }
 
@@ -418,20 +562,26 @@ body {
 
 .nav-item.active {
   color: var(--accent);
-  background: var(--glass-strong);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .nav-icon {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
+  opacity: 0.9;
 }
 
-/* ===== Settings — pill list (gradient pills like reference) ===== */
+/* ===== Settings — pill list ===== */
 .card-section {
   border-radius: var(--radius-xl);
   padding: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   box-shadow: var(--shadow);
+}
+
+.card-section:last-child {
+  margin-bottom: 28px;
 }
 
 .pill-list {
@@ -498,7 +648,7 @@ body {
 
 .btn-pill-add {
   padding: 10px 16px;
-  border: 2px dashed var(--glass-border);
+  border: 2px dashed rgba(0, 0, 0, 0.15);
   border-radius: var(--radius-md);
   background: transparent;
   color: var(--text-secondary);
@@ -644,7 +794,7 @@ body {
   height: 36px;
   border: none;
   border-radius: 50%;
-  background: var(--glass-strong);
+  background: rgba(0, 0, 0, 0.06);
   color: var(--text);
   font-size: 24px;
   line-height: 1;
@@ -676,9 +826,9 @@ body {
   padding: 14px 16px;
   font-family: var(--font);
   font-size: 17px;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-sm);
-  background: var(--glass);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -692,42 +842,69 @@ body {
 
 .field input::placeholder { color: var(--text-secondary); }
 
-.field-tithe label {
+/* Десятина: только 20% или 0%, iOS-переключатель */
+.tithe-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.field-tithe output { font-weight: 700; color: var(--tithe); }
-
-.field-tithe input[type="range"] {
-  width: 100%;
-  height: 6px;
-  margin-top: 8px;
-  padding: 0;
-  -webkit-appearance: none;
-  appearance: none;
-  background: var(--glass-strong);
-  border-radius: 3px;
+.tithe-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
 }
 
-.field-tithe input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--tithe);
+.ios-switch-wrap {
+  flex-shrink: 0;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.5);
+  display: block;
 }
 
-.field-tithe input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+.ios-switch-wrap input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ios-switch {
+  display: block;
+  width: 51px;
+  height: 31px;
+  border-radius: 31px;
+  background: rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: background 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.ios-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
   border-radius: 50%;
-  background: var(--tithe);
-  cursor: pointer;
-  border: none;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.ios-switch-wrap input:checked + .ios-switch {
+  background: var(--income);
+}
+
+.ios-switch-wrap input:checked + .ios-switch::after {
+  transform: translateX(20px);
+}
+
+.ios-switch-wrap input:focus-visible + .ios-switch {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .btn-submit {
