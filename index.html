@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Финансы</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <header class="header glass">
+      <h1 class="header-title">Финансы</h1>
+      <p class="header-subtitle">Ваш учёт</p>
+    </header>
+
+    <main class="main">
+      <!-- View: Home -->
+      <div class="view view-home" id="view-home">
+        <section class="month-bar">
+          <button type="button" class="month-btn glass" id="month-prev" aria-label="Предыдущий месяц">‹</button>
+          <span class="month-label" id="month-label">Февраль 2025</span>
+          <button type="button" class="month-btn glass" id="month-next" aria-label="Следующий месяц">›</button>
+        </section>
+
+        <section class="balance-card glass">
+          <p class="balance-label">Баланс за период</p>
+          <p class="balance-value" id="balance">0 BYN</p>
+          <div class="balance-stats balance-stats-grid">
+            <div class="stat glass-stat">
+              <span class="stat-label">Доход</span>
+              <span class="stat-value income" id="total-income">0 BYN</span>
+            </div>
+            <div class="stat glass-stat">
+              <span class="stat-label">Расход</span>
+              <span class="stat-value expense" id="total-expense">0 BYN</span>
+            </div>
+            <div class="stat glass-stat stat-tithe">
+              <span class="stat-label">Господу</span>
+              <span class="stat-value tithe" id="total-tithe">0 BYN</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="actions">
+          <button type="button" class="btn btn-gradient btn-income" id="btn-income" aria-label="Добавить доход">
+            <span class="btn-icon">+</span>
+            <span>Доход</span>
+          </button>
+          <button type="button" class="btn btn-gradient btn-expense" id="btn-expense" aria-label="Добавить расход">
+            <span class="btn-icon">−</span>
+            <span>Расход</span>
+          </button>
+        </section>
+
+        <section class="history">
+          <h2 class="section-title">История</h2>
+          <ul class="transaction-list" id="transaction-list"></ul>
+          <p class="empty-state" id="empty-state">Пока нет операций. Добавьте доход или расход.</p>
+        </section>
+      </div>
+
+      <!-- View: Goals -->
+      <div class="view view-goals" id="view-goals" hidden>
+        <section class="glass card-section">
+          <h2 class="section-title">Цели</h2>
+          <p class="section-desc">Копилки: укажите цель и сумму.</p>
+          <ul class="goals-list" id="goals-list"></ul>
+          <button type="button" class="btn btn-gradient btn-add-goal" id="btn-add-goal">+ Добавить цель</button>
+        </section>
+      </div>
+
+      <!-- View: Settings -->
+      <div class="view view-settings" id="view-settings" hidden>
+        <section class="glass card-section">
+          <h2 class="section-title">Категории доходов</h2>
+          <div class="pill-list" id="categories-income"></div>
+          <button type="button" class="btn-pill-add" id="btn-add-cat-income">+ Добавить</button>
+        </section>
+        <section class="glass card-section">
+          <h2 class="section-title">Категории расходов</h2>
+          <div class="pill-list" id="categories-expense"></div>
+          <button type="button" class="btn-pill-add" id="btn-add-cat-expense">+ Добавить</button>
+        </section>
+        <section class="glass card-section">
+          <h2 class="section-title">О приложении</h2>
+          <p class="section-desc">Финансы — учёт доходов и расходов. Данные хранятся только на устройстве (localStorage).</p>
+        </section>
+      </div>
+    </main>
+
+    <nav class="bottom-nav glass" aria-label="Навигация">
+      <button type="button" class="nav-item active" data-view="home" aria-current="page">
+        <span class="nav-icon">◉</span>
+        <span class="nav-label">Главная</span>
+      </button>
+      <button type="button" class="nav-item" data-view="goals">
+        <span class="nav-icon">◎</span>
+        <span class="nav-label">Цели</span>
+      </button>
+      <button type="button" class="nav-item" data-view="settings">
+        <span class="nav-icon">⚙</span>
+        <span class="nav-label">Настройки</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal: add transaction -->
+  <div class="modal-overlay" id="modal-overlay" aria-hidden="true">
+    <div class="modal glass" id="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">Добавить операцию</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Закрыть">&times;</button>
+      </div>
+      <form class="modal-form" id="modal-form">
+        <input type="hidden" id="transaction-type" name="type" value="income">
+        <div class="field">
+          <label for="amount">Сумма (BYN)</label>
+          <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="0" required>
+        </div>
+        <div class="field field-tithe" id="field-tithe">
+          <label>
+            <span>Десятина Господу</span>
+            <output id="tithe-value" aria-live="polite">10%</output>
+          </label>
+          <input type="range" id="tithe-slider" name="tithe" min="0" max="20" value="10" step="5" aria-label="Процент десятины">
+        </div>
+        <div class="field">
+          <label for="category">Категория</label>
+          <select id="category" name="category" required>
+            <option value="">Выберите категорию</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="note">Заметка</label>
+          <input type="text" id="note" name="note" placeholder="Необязательно" maxlength="100">
+        </div>
+        <button type="submit" class="btn btn-submit btn-gradient-submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: add/edit category -->
+  <div class="modal-overlay" id="modal-cat-overlay" aria-hidden="true">
+    <div class="modal glass" id="modal-cat" role="dialog">
+      <div class="modal-header">
+        <h2 id="modal-cat-title">Новая категория</h2>
+        <button type="button" class="modal-close" id="modal-cat-close" aria-label="Закрыть">&times;</button>
+      </div>
+      <form class="modal-form" id="modal-cat-form">
+        <input type="hidden" id="cat-type" name="catType" value="income">
+        <div class="field">
+          <label for="cat-name">Название</label>
+          <input type="text" id="cat-name" name="catName" placeholder="Например: Зарплата" maxlength="50" required>
+        </div>
+        <button type="submit" class="btn btn-submit btn-gradient-submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: add/edit goal -->
+  <div class="modal-overlay" id="modal-goal-overlay" aria-hidden="true">
+    <div class="modal glass" id="modal-goal" role="dialog">
+      <div class="modal-header">
+        <h2 id="modal-goal-title">Новая цель</h2>
+        <button type="button" class="modal-close" id="modal-goal-close" aria-label="Закрыть">&times;</button>
+      </div>
+      <form class="modal-form" id="modal-goal-form">
+        <input type="hidden" id="goal-id" name="goalId" value="">
+        <div class="field">
+          <label for="goal-name">Название цели</label>
+          <input type="text" id="goal-name" name="goalName" placeholder="Например: Отпуск" maxlength="50" required>
+        </div>
+        <div class="field">
+          <label for="goal-target">Целевая сумма (BYN)</label>
+          <input type="number" id="goal-target" name="goalTarget" min="1" step="0.01" placeholder="0" required>
+        </div>
+        <div class="field">
+          <label for="goal-current">Сейчас отложено (BYN)</label>
+          <input type="number" id="goal-current" name="goalCurrent" min="0" step="0.01" placeholder="0">
+        </div>
+        <button type="submit" class="btn btn-submit btn-gradient-submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
